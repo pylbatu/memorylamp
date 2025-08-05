@@ -5,8 +5,17 @@ import tsconfigPaths from 'vite-tsconfig-paths'
 export default defineConfig({
   plugins: [tsconfigPaths(), react()],
   test: {
+    poolOptions: {
+      threads: {
+        // Threads related options here
+        singleThread: true,
+      }
+    },
     environment: 'jsdom',
     setupFiles: ['./vitest.setup.ts'],
     include: ['tests/int/**/*.int.spec.ts'],
+    sequence: {
+      concurrent: false, // Set to false to disable concurrent execution
+    },
   },
 })
