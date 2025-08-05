@@ -72,6 +72,10 @@ export interface Config {
     media: Media;
     categories: Category;
     users: User;
+    'user-collections': UserCollection;
+    verses: Verse;
+    'user-cards': UserCard;
+    'user-reviews': UserReview;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -88,6 +92,10 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
+    'user-collections': UserCollectionsSelect<false> | UserCollectionsSelect<true>;
+    verses: VersesSelect<false> | VersesSelect<true>;
+    'user-cards': UserCardsSelect<false> | UserCardsSelect<true>;
+    'user-reviews': UserReviewsSelect<false> | UserReviewsSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -736,6 +744,66 @@ export interface Form {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "user-collections".
+ */
+export interface UserCollection {
+  id: number;
+  title: string;
+  owner: number | User;
+  description?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "verses".
+ */
+export interface Verse {
+  id: number;
+  reference: string;
+  text: string;
+  version?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "user-cards".
+ */
+export interface UserCard {
+  id: number;
+  user: number | User;
+  collection: number | UserCollection;
+  verse: number | Verse;
+  /**
+   * Next review date (based on SRS algorithm)
+   */
+  dueDate: string;
+  interval?: number | null;
+  easeFactor?: number | null;
+  repetitions?: number | null;
+  lastReviewed?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "user-reviews".
+ */
+export interface UserReview {
+  id: number;
+  card: number | UserCard;
+  user: number | User;
+  /**
+   * SRS grade: 0-5 (5 = perfect recall)
+   */
+  score: number;
+  reviewedAt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -926,6 +994,22 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'users';
         value: number | User;
+      } | null)
+    | ({
+        relationTo: 'user-collections';
+        value: number | UserCollection;
+      } | null)
+    | ({
+        relationTo: 'verses';
+        value: number | Verse;
+      } | null)
+    | ({
+        relationTo: 'user-cards';
+        value: number | UserCard;
+      } | null)
+    | ({
+        relationTo: 'user-reviews';
+        value: number | UserReview;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -1290,6 +1374,56 @@ export interface UsersSelect<T extends boolean = true> {
         createdAt?: T;
         expiresAt?: T;
       };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "user-collections_select".
+ */
+export interface UserCollectionsSelect<T extends boolean = true> {
+  title?: T;
+  owner?: T;
+  description?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "verses_select".
+ */
+export interface VersesSelect<T extends boolean = true> {
+  reference?: T;
+  text?: T;
+  version?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "user-cards_select".
+ */
+export interface UserCardsSelect<T extends boolean = true> {
+  user?: T;
+  collection?: T;
+  verse?: T;
+  dueDate?: T;
+  interval?: T;
+  easeFactor?: T;
+  repetitions?: T;
+  lastReviewed?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "user-reviews_select".
+ */
+export interface UserReviewsSelect<T extends boolean = true> {
+  card?: T;
+  user?: T;
+  score?: T;
+  reviewedAt?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
