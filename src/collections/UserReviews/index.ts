@@ -1,3 +1,4 @@
+import { updateSRSFields } from '@/srs/srs-algorithm';
 import { CollectionConfig } from 'payload';
 
 const UserReviews: CollectionConfig = {
@@ -33,6 +34,18 @@ const UserReviews: CollectionConfig = {
       defaultValue: () => new Date(),
     },
   ],
+  hooks: {
+    afterChange: [
+      async ({ doc }) => {
+        const cardId = typeof doc.card === 'string' ? doc.card : doc.card?.id
+        if (cardId && doc.score !== undefined) {
+          await updateSRSFields(cardId, doc.score)
+        }
+      },
+    ],
+
+  },
+
 };
 
 export default UserReviews;
