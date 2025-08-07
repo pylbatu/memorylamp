@@ -1,4 +1,4 @@
-import { getPayload, Payload } from 'payload'
+import { getPayload } from 'payload'
 import config from '@/payload.config'
 
 export const updateSRSFields = async (cardId: string, score: number) => {
