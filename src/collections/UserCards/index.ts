@@ -22,7 +22,7 @@ const UserCards: CollectionConfig = {
     {
       name: 'verse',
       type: 'relationship',
-      relationTo: 'verses',
+      relationTo: 'testament-book-chapter-verses',
       required: true,
     },
     {

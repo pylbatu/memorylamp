@@ -73,7 +73,10 @@ export interface Config {
     categories: Category;
     users: User;
     'user-collections': UserCollection;
-    verses: Verse;
+    testaments: Testament;
+    'testament-books': TestamentBook;
+    'testament-book-chapters': TestamentBookChapter;
+    'testament-book-chapter-verses': TestamentBookChapterVerse;
     'user-cards': UserCard;
     'user-reviews': UserReview;
     redirects: Redirect;
@@ -93,7 +96,10 @@ export interface Config {
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     'user-collections': UserCollectionsSelect<false> | UserCollectionsSelect<true>;
-    verses: VersesSelect<false> | VersesSelect<true>;
+    testaments: TestamentsSelect<false> | TestamentsSelect<true>;
+    'testament-books': TestamentBooksSelect<false> | TestamentBooksSelect<true>;
+    'testament-book-chapters': TestamentBookChaptersSelect<false> | TestamentBookChaptersSelect<true>;
+    'testament-book-chapter-verses': TestamentBookChapterVersesSelect<false> | TestamentBookChapterVersesSelect<true>;
     'user-cards': UserCardsSelect<false> | UserCardsSelect<true>;
     'user-reviews': UserReviewsSelect<false> | UserReviewsSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
@@ -756,12 +762,48 @@ export interface UserCollection {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "verses".
+ * via the `definition` "testaments".
  */
-export interface Verse {
+export interface Testament {
   id: string;
-  reference: string;
+  name: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "testament-books".
+ */
+export interface TestamentBook {
+  id: string;
+  name: string;
+  order: number;
+  testament: string | Testament;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "testament-book-chapters".
+ */
+export interface TestamentBookChapter {
+  id: string;
+  book: string | TestamentBook;
+  number: number;
+  title?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "testament-book-chapter-verses".
+ */
+export interface TestamentBookChapterVerse {
+  id: string;
+  chapter: string | TestamentBookChapter;
+  number: number;
   text: string;
+  reference?: string | null;
   version?: string | null;
   updatedAt: string;
   createdAt: string;
@@ -774,7 +816,7 @@ export interface UserCard {
   id: string;
   user: string | User;
   collection: string | UserCollection;
-  verse: string | Verse;
+  verse: string | TestamentBookChapterVerse;
   /**
    * Next review date (based on SRS algorithm)
    */
@@ -1000,8 +1042,20 @@ export interface PayloadLockedDocument {
         value: string | UserCollection;
       } | null)
     | ({
-        relationTo: 'verses';
-        value: string | Verse;
+        relationTo: 'testaments';
+        value: string | Testament;
+      } | null)
+    | ({
+        relationTo: 'testament-books';
+        value: string | TestamentBook;
+      } | null)
+    | ({
+        relationTo: 'testament-book-chapters';
+        value: string | TestamentBookChapter;
+      } | null)
+    | ({
+        relationTo: 'testament-book-chapter-verses';
+        value: string | TestamentBookChapterVerse;
       } | null)
     | ({
         relationTo: 'user-cards';
@@ -1388,11 +1442,44 @@ export interface UserCollectionsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "verses_select".
+ * via the `definition` "testaments_select".
  */
-export interface VersesSelect<T extends boolean = true> {
-  reference?: T;
+export interface TestamentsSelect<T extends boolean = true> {
+  name?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "testament-books_select".
+ */
+export interface TestamentBooksSelect<T extends boolean = true> {
+  name?: T;
+  order?: T;
+  testament?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "testament-book-chapters_select".
+ */
+export interface TestamentBookChaptersSelect<T extends boolean = true> {
+  book?: T;
+  number?: T;
+  title?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "testament-book-chapter-verses_select".
+ */
+export interface TestamentBookChapterVersesSelect<T extends boolean = true> {
+  chapter?: T;
+  number?: T;
   text?: T;
+  reference?: T;
   version?: T;
   updatedAt?: T;
   createdAt?: T;

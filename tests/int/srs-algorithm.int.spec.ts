@@ -25,15 +25,113 @@ describe('SRS Algorithm Integration', () => {
         })
         userId = user.id
 
-        // Create verse
-        const verse = await payload.create({
-            collection: 'verses',
-            data: {
-                reference: 'Proverbs 3:5',
-                text: 'Trust in the Lord with all your heart...',
+
+
+        // 0. Clean up all related collections for a fresh state
+        await payload.delete({
+            collection: 'users',
+            where: {
+                email: {
+                    equals: 'test@tester.com',
+                },
             },
         })
-        verseId = verse.id
+        await payload.delete({
+            collection: 'user-reviews',
+            where: {
+                user: {
+                    equals: 'test@tester.com',
+                },
+            },
+        })
+        await payload.delete({
+            collection: 'user-cards',
+            where: {
+                user: {
+                    equals: 'test@tester.com',
+                },
+            },
+        })
+        await payload.delete({
+            collection: 'user-collections',
+            where: {
+                title: {
+                    equals: 'Test Collection',
+                },
+            },
+        })
+
+        // Optional: Clean up any previous test data
+        await payload.delete({
+            collection: 'testaments',
+            where: {
+                name: {
+                    like: 'Old Testament',
+                },
+            },
+        });
+        await payload.delete({
+            collection: 'testament-books',
+            where: {
+                name: {
+                    like: 'John',
+                },
+            },
+        });
+        await payload.delete({
+            collection: 'testament-book-chapters',
+            where: {
+                number: {
+                    equals: 3,
+                },
+            },
+        });
+        await payload.delete({
+            collection: 'testament-book-chapter-verses',
+            where: {
+                number: {
+                    equals: 16,
+                },
+            },
+        });
+
+        // Create testament
+        const testament = await payload.create({
+            collection: 'testaments',
+            data: {
+                name: 'Old Testament',
+            },
+        });
+
+        // Create book
+        const book = await payload.create({
+            collection: 'testament-books',
+            data: {
+                order: 1,
+                name: 'John',
+                testament: testament.id,
+            },
+        });
+
+        // Create chapter
+        const chapter = await payload.create({
+            collection: 'testament-book-chapters',
+            data: {
+                book: book.id,
+                number: 3,
+            },
+        });
+
+        // Create verse
+        const verse = await payload.create({
+            collection: 'testament-book-chapter-verses',
+            data: {
+                chapter: chapter.id,
+                number: 16,
+                version: 'ESV',
+                text: 'For God so loved the world...',
+            },
+        });
 
         // Create collection
         const collection = await payload.create({
@@ -51,7 +149,7 @@ describe('SRS Algorithm Integration', () => {
             data: {
                 user: userId,
                 collection: collectionId,
-                verse: verseId,
+                verse: verse.id,
                 dueDate: new Date().toISOString(), // due now
                 interval: 1,
                 easeFactor: 2.5,

@@ -18,9 +18,12 @@ import { plugins } from './plugins'
 import { defaultLexical } from '@/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
 import UserCollections from './collections/UserCollections'
-import Verses from './collections/Verses'
 import UserCards from './collections/UserCards'
 import UserReviews from './collections/UserReviews'
+import Testaments from './collections/Testaments'
+import TestamentBooks from './collections/TestamentBooks'
+import TestamentBookChapters from './collections/TestamentBookChapters'
+import TestamentBookChapterVerses from './collections/TestamentBookChapterVerses'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -70,7 +73,7 @@ export default buildConfig({
     // URL is required.
     url: process.env.DATABASE_URI,
   }),
-  collections: [Pages, Posts, Media, Categories, Users, UserCollections, Verses, UserCards, UserReviews],
+  collections: [Pages, Posts, Media, Categories, Users, UserCollections, Testaments, TestamentBooks, TestamentBookChapters, TestamentBookChapterVerses, UserCards, UserReviews],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],
   plugins: [
